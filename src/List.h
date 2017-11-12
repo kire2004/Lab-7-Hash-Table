@@ -1,13 +1,14 @@
-/*
-ListTest.cpp
-*created by Altin Campbell and Erik Rackley
-*CIS 22C, Lab 2
-*Oct 9, 2017
-*11:40:02 PM
-*/
+//============================================================================
+// Name        : List.H
+// Author      : Altin & Erik the great
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
 
-#ifndef LIST_H_
-#define LIST_H_
+//#ifndef LIST_H_
+//#define LIST_H_
+#pragma once
 #include <cstddef> //for NULL
 #include <iostream>
 #include <cstdlib>
@@ -189,7 +190,7 @@ public:
 
 
 };
-#endif /* LIST_H_ */
+//#endif /* LIST_H_ */
 
 
 /**************************************/
@@ -237,6 +238,7 @@ List<listdata>::List(const List &list1)
 
 		            temp = temp->linknext; // continue to point to the next node
 		            iterator->linknext = new Node(temp->data);
+		            iterator->linknext->prevlink = iterator;
 		            iterator = iterator->linknext;
 		        }
 		        stop = iterator;//sets tail of list
@@ -254,8 +256,9 @@ void List<listdata>::print() const
 {
     Node* temp = start; //create a temporary iterator
     while (temp != NULL) {
-
-       cout << temp->data << " "; //prints data to console
+    	//THIS IS THE REAL ONE: With the space
+    	cout << temp->data << " ";
+    	//cout << temp->data << endl; //prints data to console
 
     	temp = temp->linknext; // traverses the list
     }
@@ -526,7 +529,7 @@ void List <listdata>:: reversePrint() const {
 		return;
 	else{
 		Node* temp = stop;
-		reversePrint(temp);
+		reversePrint(stop);
 		//reversePrint(stop);
 	}
 }
@@ -594,17 +597,18 @@ int found = -1;
 	Node* temp = start;
 	int counter = 1;
     //pointIterator();
-	while(temp->linknext != NULL && (temp->data != data)){
+	//while(temp->linknext != NULL && (temp->data != data)){
+	while(temp != NULL){
+		if (temp->data == data)
+			return counter;
 		temp = temp->linknext;
 		counter++;
 		//advanceIterator();
-		if (temp->data == data)
-			return counter;
 	}
-	cout << "not found: ";
+	//cout << "not found: ";
 return found;
 }
-//////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 template <class listdata>
 int List<listdata>::binarySearch(listdata data) const {
 	assert(size!= 0);
@@ -621,9 +625,8 @@ int List<listdata>::binarySearch(int low, int high, listdata data) const {
 		cout << "Not Found: ";
 		return -1;
 	}
-	//int mid = low + (high-low)/2;
 	if (mid == data)
-		return linearSearch(mid); /// we cant return the index since its const
+		return linearSearch(data); /// we cant return the index since its const
 		//return mid;
 	else if (data < mid)
 		return binarySearch(low, mid-1, data);
